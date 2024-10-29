@@ -51,6 +51,7 @@ class _HeaderAction extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(right: 10.w),
       child: Material(
+        color: Colors.transparent,
         child: InkWell(
           onTap: () {
             context.push(
@@ -85,7 +86,6 @@ class _HeaderTitle extends StatelessWidget {
     );
   }
 }
-
 
 class _LoadingView extends StatelessWidget {
   const _LoadingView();

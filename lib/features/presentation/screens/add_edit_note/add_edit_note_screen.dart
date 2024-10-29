@@ -167,8 +167,10 @@ class _IconView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.transparent,
       margin: margin,
       child: Material(
+        color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
           child: Icon(
