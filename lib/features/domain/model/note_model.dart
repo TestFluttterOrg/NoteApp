@@ -4,11 +4,13 @@ class NoteModel extends Equatable {
   final String id;
   final String title;
   final String content;
+  final DateTime? createdAt;
 
   const NoteModel({
     this.id = "",
     this.title = "",
     this.content = "",
+    this.createdAt,
   });
 
   @override
@@ -16,5 +18,6 @@ class NoteModel extends Equatable {
         id,
         title,
         content,
+        createdAt,
       ];
 }
