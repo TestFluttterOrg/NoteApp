@@ -1,102 +1,108 @@
 import 'dart:convert';
-
+import 'package:noteapp/core/constants/app_constants.dart';
 import 'package:noteapp/core/constants/app_strings.dart';
 import 'package:noteapp/features/data/api/api_service.dart';
-import 'package:noteapp/features/data/datasource/constants/pref_constants.dart';
-import 'package:noteapp/features/data/datasource/shared_pref_datasource.dart';
 import 'package:noteapp/features/domain/entity/note_entity.dart';
 import 'package:noteapp/features/domain/entity/note_list_entity.dart';
 import 'package:noteapp/features/domain/model/result_model.dart';
+import 'package:http/http.dart' as http;
 
 class APIServiceImpl extends APIService {
-  final SharedPrefDataSource sharedPrefDataSource;
-
-  APIServiceImpl({
-    required this.sharedPrefDataSource,
-  });
-
-  final List<NoteEntity> _noteList = [];
-
   @override
   Future<ResultModel<NoteEntity>> addNote(NoteEntity note) async {
     try {
-      //generate id base on the previous counter
-      final id = int.parse(await sharedPrefDataSource.getData(PrefConstants.noteIdCtrKey) ?? "0") + 1;
+      var url = Uri.https(AppConstants.apiBaseUrl, 'api/notes');
+      var response = await http.post(url, body: note.toJson());
+      if (response.statusCode == 201) {
+        final rawData = response.body;
 
-      final noteData = note.copyWith(id: id);
+        //Convert raw data to map
+        final jsonData = json.decode(rawData);
 
-      //Add to note list
-      _noteList.add(noteData);
+        //Convert json data to note entity
+        final entity = NoteEntity.fromJson(jsonData);
 
-      final noteList = NoteListEntity(data: _noteList).toJson();
-
-      //Save the new list to local
-      final jsonData = jsonEncode(noteList);
-      await sharedPrefDataSource.setData(PrefConstants.notesKey, jsonData);
-
-      return ResultModel(
-        isSuccess: true,
-        data: noteData,
-      );
-
-    } catch (_) {
-      return const ResultModel(
-        isSuccess: false,
-        message: AppStrings.messageFailedToSave,
-      );
-    }
+        return ResultModel(
+          isSuccess: true,
+          data: entity,
+          message: AppStrings.messageNoteAdded,
+        );
+      }
+    } catch (_) {}
+    return const ResultModel(
+      isSuccess: false,
+      message: AppStrings.messageFailedToAdd,
+    );
   }
 
   @override
   Future<ResultModel> deleteNote(String noteId) async {
-    // TODO: implement deleteNote
-    throw UnimplementedError();
+    try {
+      var url = Uri.https(AppConstants.apiBaseUrl, 'api/notes/$noteId');
+      var response = await http.delete(url);
+      if (response.statusCode == 200) {
+        return const ResultModel(
+          isSuccess: true,
+          message: AppStrings.messageNoteDeleted,
+        );
+      }
+    } catch (_) {}
+    return const ResultModel(
+      isSuccess: false,
+      message: AppStrings.messageFailedToDelete,
+    );
   }
 
   @override
   Future<ResultModel<List<NoteEntity>>> fetchNotes() async {
     try {
-      if (_noteList.isEmpty) {
+      var url = Uri.https(AppConstants.apiBaseUrl, 'api/notes');
+      var response = await http.get(url);
+      if (response.statusCode == 200) {
+        final rawData = response.body;
 
-        //Delay in 2 seconds to simulate API call
-        await Future.delayed(const Duration(seconds: 2));
-
-        //Get raw string from shared pref
-        final notesRaw = await sharedPrefDataSource.getData(PrefConstants.notesKey);
-        if (notesRaw == null) {
-          return const ResultModel(
-            isSuccess: false,
-            isNoData: true,
-            message: AppStrings.messageNoDataFound,
-          );
-        }
-
-        //Convert raw string to map
-        final jsonData = json.decode(notesRaw);
+        //Convert raw data to map
+        final jsonData = json.decode(rawData);
 
         //Convert map to note list entity
         final noteList = NoteListEntity.fromJson(jsonData);
 
-        _noteList.clear();
-        _noteList.addAll(noteList.data);
-
+        return ResultModel(
+          isSuccess: true,
+          data: noteList.data,
+        );
       }
-
-      return ResultModel(
-        isSuccess: true,
-        data: _noteList,
-      );
-    } catch (_) {
-      return const ResultModel(
-        isSuccess: false,
-        message: AppStrings.messageFailedToGetNotes,
-      );
-    }
+    } catch (_) {}
+    return const ResultModel(
+      isSuccess: false,
+      message: AppStrings.messageFailedToGetNotes,
+    );
   }
 
   @override
-  Future<ResultModel> updateNote(NoteEntity note) async {
-    // TODO: implement updateNote
-    throw UnimplementedError();
+  Future<ResultModel<NoteEntity>> updateNote(NoteEntity note) async {
+    try {
+      var url = Uri.https(AppConstants.apiBaseUrl, 'api/notes/${note.id ?? ""}');
+      var response = await http.put(url, body: note.toJson());
+      if (response.statusCode == 200) {
+        final rawData = response.body;
+
+        //Convert raw data to map
+        final jsonData = json.decode(rawData);
+
+        //Convert map to note entity
+        final entity = NoteEntity.fromJson(jsonData);
+
+        return ResultModel(
+          isSuccess: true,
+          message: AppStrings.messageNoteEdited,
+          data: entity,
+        );
+      }
+    } catch (_) {}
+    return const ResultModel(
+      isSuccess: false,
+      message: AppStrings.messageFailedToEdit,
+    );
   }
 }

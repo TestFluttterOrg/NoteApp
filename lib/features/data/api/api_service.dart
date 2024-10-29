@@ -6,7 +6,7 @@ abstract class APIService {
 
   Future<ResultModel<NoteEntity>> addNote(NoteEntity note);
 
-  Future<void> deleteNote(String noteId);
+  Future<ResultModel> deleteNote(String noteId);
 
-  Future<void> updateNote(NoteEntity note);
+  Future<ResultModel<NoteEntity>> updateNote(NoteEntity note);
 }
