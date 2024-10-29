@@ -36,7 +36,7 @@ class AppInput extends StatelessWidget {
       maxLines: maxLines,
       onChanged: onTextChanged,
       textAlign: TextAlign.start,
-      textAlignVertical: expands ? TextAlignVertical.top : null,
+      textAlignVertical: expands ? TextAlignVertical.top : TextAlignVertical.center,
       cursorColor: AppColors.fieldCursorColor,
       cursorHeight: 15.h,
       style: TextStyle(
@@ -45,6 +45,7 @@ class AppInput extends StatelessWidget {
         fontSize: fontSize,
       ),
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
         isDense: true,
         hintText: hintText,
         hintStyle: TextStyle(
