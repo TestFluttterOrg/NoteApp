@@ -23,4 +23,22 @@ class AddEditNoteBloc extends Cubit<AddEditNoteState> {
   void setAction(ActionType action) {
     emit(state.copyWith(actionType: action));
   }
+
+  void validateTitle(String title) {
+    if (title.trim() == "" || title.trim() == " ") {
+      emit(state.copyWith(isTitleValid: false));
+    } else {
+      emit(state.copyWith(isTitleValid: true));
+    }
+  }
+
+  void save({
+    required String title,
+    required String content,
+  }) async {
+    validateTitle(title);
+    if (state.isTitleValid) {
+      
+    }
+  }
 }

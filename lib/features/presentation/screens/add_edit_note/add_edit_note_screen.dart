@@ -10,6 +10,9 @@ import 'package:noteapp/features/presentation/components/app_scaffold.dart';
 import 'package:noteapp/features/presentation/screens/add_edit_note/bloc/add_edit_note_bloc.dart';
 import 'package:noteapp/features/presentation/screens/add_edit_note/bloc/add_edit_note_state.dart';
 
+TextEditingController _titleController = TextEditingController();
+TextEditingController _contentController = TextEditingController();
+
 class AddEditNoteScreen extends StatelessWidget {
   final ActionParamModel action;
 
@@ -34,6 +37,7 @@ class _AddEditNoteForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = context.read<AddEditNoteBloc>();
     return AppScaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -53,13 +57,28 @@ class _AddEditNoteForm extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            //Title Label
             const _FormLabelView(text: AppStrings.title),
-            AppInput(),
-            SizedBox(height: 15.h),
+            //Title TextField
+            BlocBuilder<AddEditNoteBloc, AddEditNoteState>(
+              buildWhen: (prev, current) => prev.isTitleValid != current.isTitleValid,
+              builder: (context, state) {
+                return AppInput(
+                  controller: _titleController,
+                  isValid: state.isTitleValid,
+                  errorMessage: state.isTitleValid ? "" : AppStrings.messageTitleCannotBeEmpty,
+                  onTextChanged: bloc.validateTitle,
+                );
+              },
+            ),
+            SizedBox(height: 10.h),
+            //Content Label
             const _FormLabelView(text: AppStrings.content),
+            //Content TextField
             Expanded(
               child: SizedBox(
                 child: AppInput(
+                  controller: _contentController,
                   maxLines: null,
                   minLines: null,
                   keyboardType: TextInputType.multiline,
@@ -120,10 +139,16 @@ class _HeaderActions extends StatelessWidget {
         final action = state.actionType;
         return Row(
           children: [
-            if (action == ActionType.add)
+            if (action == ActionType.add || action == ActionType.edit)
               _IconView(
+                margin: EdgeInsets.only(right: 10.w),
                 icon: Icons.save,
-                onTap: () {},
+                onTap: () {
+                  bloc.save(
+                    title: _titleController.text,
+                    content: _contentController.text,
+                  );
+                },
               ),
             if (action == ActionType.view)
               _IconView(
@@ -135,17 +160,18 @@ class _HeaderActions extends StatelessWidget {
               ),
             if (action == ActionType.view)
               _IconView(
+                margin: EdgeInsets.only(right: 10.w),
                 icon: Icons.delete,
                 onTap: () {},
               ),
             if (action == ActionType.edit)
               _IconView(
+                margin: EdgeInsets.only(right: 10.w),
                 icon: Icons.close,
                 onTap: () {
                   bloc.setAction(ActionType.view);
                 },
               ),
-            SizedBox(width: 10.w),
           ],
         );
       },

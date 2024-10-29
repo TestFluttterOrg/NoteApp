@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:noteapp/core/constants/app_colors.dart';
 
 class AppInput extends StatelessWidget {
+  final TextEditingController controller;
   final String hintText;
   final bool isValid;
   final Function(String)? onTextChanged;
@@ -14,6 +15,7 @@ class AppInput extends StatelessWidget {
 
   const AppInput({
     super.key,
+    required this.controller,
     this.hintText = "",
     this.isValid = true,
     this.onTextChanged,
@@ -31,6 +33,7 @@ class AppInput extends StatelessWidget {
     final fontSize = 15.sp;
 
     final fieldView = TextField(
+      controller: controller,
       expands: expands,
       minLines: minLines,
       maxLines: maxLines,
@@ -55,14 +58,14 @@ class AppInput extends StatelessWidget {
         ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: errorMessage.isNotEmpty ? AppColors.fieldRedBorderColor : AppColors.fieldGrayBorderColor,
+            color: !isValid ? AppColors.fieldRedBorderColor : AppColors.fieldGrayBorderColor,
             width: borderWidth,
           ),
           borderRadius: BorderRadius.circular(borderRadius),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: errorMessage.isNotEmpty ? AppColors.fieldRedBorderColor : AppColors.fieldBlueBorderColor,
+            color: !isValid ? AppColors.fieldRedBorderColor : AppColors.fieldBlueBorderColor,
             width: borderWidth,
           ),
           borderRadius: BorderRadius.circular(borderRadius),
