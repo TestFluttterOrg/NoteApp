@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:noteapp/features/domain/enum/action_type.dart';
 import 'package:noteapp/features/domain/model/action_param_model.dart';
 import 'package:noteapp/features/domain/repository/note_repository.dart';
 import 'package:noteapp/features/presentation/screens/add_edit_note/bloc/add_edit_note_state.dart';
@@ -11,6 +12,15 @@ class AddEditNoteBloc extends Cubit<AddEditNoteState> {
   }) : super(const AddEditNoteState());
 
   void initialize(ActionParamModel action) {
+    emit(
+      state.copyWith(
+        actionType: action.actionType,
+        note: action.data,
+      ),
+    );
+  }
 
+  void setAction(ActionType action) {
+    emit(state.copyWith(actionType: action));
   }
 }
