@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:noteapp/core/routes/app_routes.dart';
+import 'package:noteapp/features/domain/model/action_param_model.dart';
 import 'package:noteapp/features/presentation/screens/add_edit_note/add_edit_note_screen.dart';
 import 'package:noteapp/features/presentation/screens/note_list/note_list_screen.dart';
 
@@ -22,7 +23,8 @@ class Routes {
         path: AppRoutes.addEditNote,
         name: AppRoutes.addEditNote,
         builder: (_, state) {
-          return const AddEditNoteScreen();
+          final action = state.extra as ActionParamModel;
+          return AddEditNoteScreen(action: action);
         },
       ),
     ],

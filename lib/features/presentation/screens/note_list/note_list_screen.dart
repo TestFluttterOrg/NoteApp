@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:noteapp/core/constants/app_colors.dart';
 import 'package:noteapp/core/constants/app_strings.dart';
+import 'package:noteapp/core/routes/app_routes.dart';
 import 'package:noteapp/core/utility/app_utility.dart';
+import 'package:noteapp/features/domain/enum/action_type.dart';
+import 'package:noteapp/features/domain/model/action_param_model.dart';
 import 'package:noteapp/features/domain/model/note_model.dart';
 import 'package:noteapp/features/presentation/components/app_button.dart';
-import 'package:noteapp/features/presentation/components/app_dialog.dart';
 import 'package:noteapp/features/presentation/components/app_scaffold.dart';
 import 'package:noteapp/features/presentation/screens/note_list/bloc/note_list_bloc.dart';
 import 'package:noteapp/features/presentation/screens/note_list/bloc/note_list_state.dart';
@@ -18,6 +21,37 @@ class NoteListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppScaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text(
+          AppStrings.noteList,
+          style: TextStyle(
+            fontSize: 17.sp,
+            fontWeight: FontWeight.w500,
+            color: Colors.black,
+          ),
+        ),
+        actions: [
+          Container(
+            margin: EdgeInsets.only(right: 10.w),
+            child: Material(
+              child: InkWell(
+                onTap: () {
+                  context.push(
+                    AppRoutes.addEditNote,
+                    extra: const ActionParamModel(
+                      actionType: ActionType.add,
+                    ),
+                  );
+                },
+                child: Icon(
+                  Icons.add,
+                  size: 30.h, // Customize the size
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: BlocBuilder<NoteListBloc, NoteListState>(
         builder: (context, state) {
           if (state is NoteListLoadingState) {
@@ -98,7 +132,7 @@ class _NoteListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      //padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+      padding: EdgeInsets.symmetric(vertical: 10.h),
       child: Stack(
         children: [
           BlocBuilder<NoteListBloc, NoteListState>(
@@ -146,33 +180,54 @@ class _ListItemView extends StatelessWidget {
       height: 80.h,
       margin: EdgeInsets.symmetric(horizontal: 15.h),
       child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.r),
+        ),
         color: Colors.white,
         elevation: 2,
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 15.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                data.title,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 15.sp,
-                  color: Colors.black,
+        child: Material(
+          borderRadius: BorderRadius.circular(10.r),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(10.r),
+            onTap: () {
+              context.push(
+                AppRoutes.addEditNote,
+                extra: ActionParamModel(
+                  actionType: ActionType.view,
+                  data: data,
+                ),
+              );
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10.r),
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 15.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      data.title,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 15.sp,
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(height: 2.h),
+                    if (data.createdAt != null)
+                      Text(
+                        AppUtility.formatDateTime(data.createdAt!),
+                        style: TextStyle(
+                          fontSize: 13.sp,
+                          color: AppColors.gray700,
+                        ),
+                      ),
+                  ],
                 ),
               ),
-              SizedBox(height: 2.h),
-              if (data.createdAt != null)
-                Text(
-                  AppUtility.formatDateTime(data.createdAt!),
-                  style: TextStyle(
-                    fontSize: 13.sp,
-                    color: AppColors.gray700,
-                  ),
-                ),
-            ],
+            ),
           ),
         ),
       ),
