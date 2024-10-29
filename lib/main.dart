@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         //Global BLOCs
-        BlocProvider(create: (_) => di.vf<NoteListBloc>()..initialize()),
+        BlocProvider(create: (_) => di.vf<NoteListBloc>()..getNoteList()),
       ],
       child: ScreenUtilInit(
         builder: (context, widget) {

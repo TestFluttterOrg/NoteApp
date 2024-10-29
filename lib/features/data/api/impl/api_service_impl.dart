@@ -56,20 +56,20 @@ class APIServiceImpl extends APIService {
   @override
   Future<ResultModel<List<NoteEntity>>> fetchNotes() async {
     try {
-      var url = Uri.https(AppConstants.apiBaseUrl, 'api/notes');
+      var url = Uri.parse("${AppConstants.apiBaseUrl}/api/notes");
       var response = await http.get(url);
       if (response.statusCode == 200) {
         final rawData = response.body;
 
-        //Convert raw data to map
-        final jsonData = json.decode(rawData);
+        // Decode JSON string to List<dynamic>
+        final List<dynamic> jsonList = json.decode(rawData);
 
-        //Convert map to note list entity
-        final noteList = NoteListEntity.fromJson(jsonData);
+        // Map JSON list to List<NoteEntity>
+        final List<NoteEntity> notes = jsonList.map((json) => NoteEntity.fromJson(json as Map<String, dynamic>)).toList();
 
         return ResultModel(
           isSuccess: true,
-          data: noteList.data,
+          data: notes,
         );
       }
     } catch (_) {}

@@ -8,6 +8,11 @@ class AppStrings {
   static const message = "Message";
   static const close = "Close";
   static const okay = "Okay";
+  static const noteList = "Note List";
+  static const addNote = "Add Note";
+  static const editNote = "Edit Note";
+  static const note = "Note";
+  static const retry = "Retry";
 
   static const messageFailedToGetNotes = "Failed to get Notes";
   static const messageNoDataFound = "No data found";

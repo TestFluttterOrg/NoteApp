@@ -9,7 +9,21 @@ class NoteListBloc extends Cubit<NoteListState> {
     required this.noteRepository,
   }) : super(NoteListInitialState());
 
-  void initialize() {
+  void getNoteList() async {
+    emit(NoteListLoadingState());
 
+    final data = await noteRepository.getAllNotes();
+    data.fold(
+      (left) {
+        emit(NoteListErrorState(message: left.message));
+      },
+      (right) {
+        emit(
+          NoteListLoadedState(
+            noteList: right.data ?? [],
+          ),
+        );
+      },
+    );
   }
 }
