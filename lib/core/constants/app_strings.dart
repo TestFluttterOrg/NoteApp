@@ -13,6 +13,8 @@ class AppStrings {
   static const editNote = "Edit Note";
   static const note = "Note";
   static const retry = "Retry";
+  static const title = "Title";
+  static const content = "Content";
 
   static const messageFailedToGetNotes = "Failed to get Notes";
   static const messageNoDataFound = "No data found";

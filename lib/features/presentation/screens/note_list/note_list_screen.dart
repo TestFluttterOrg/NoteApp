@@ -22,34 +22,9 @@ class NoteListScreen extends StatelessWidget {
     return AppScaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(
-          AppStrings.noteList,
-          style: TextStyle(
-            fontSize: 17.sp,
-            fontWeight: FontWeight.w500,
-            color: Colors.black,
-          ),
-        ),
-        actions: [
-          Container(
-            margin: EdgeInsets.only(right: 10.w),
-            child: Material(
-              child: InkWell(
-                onTap: () {
-                  context.push(
-                    AppRoutes.addEditNote,
-                    extra: const ActionParamModel(
-                      actionType: ActionType.add,
-                    ),
-                  );
-                },
-                child: Icon(
-                  Icons.add,
-                  size: 30.h, // Customize the size
-                ),
-              ),
-            ),
-          ),
+        title: const _HeaderTitle(),
+        actions: const [
+          _HeaderAction(),
         ],
       ),
       body: BlocBuilder<NoteListBloc, NoteListState>(
@@ -67,6 +42,50 @@ class NoteListScreen extends StatelessWidget {
     );
   }
 }
+
+class _HeaderAction extends StatelessWidget {
+  const _HeaderAction();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(right: 10.w),
+      child: Material(
+        child: InkWell(
+          onTap: () {
+            context.push(
+              AppRoutes.addEditNote,
+              extra: const ActionParamModel(
+                actionType: ActionType.add,
+              ),
+            );
+          },
+          child: Icon(
+            Icons.add,
+            size: 30.h, // Customize the size
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _HeaderTitle extends StatelessWidget {
+  const _HeaderTitle();
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      AppStrings.noteList,
+      style: TextStyle(
+        fontSize: 17.sp,
+        fontWeight: FontWeight.w500,
+        color: Colors.black,
+      ),
+    );
+  }
+}
+
 
 class _LoadingView extends StatelessWidget {
   const _LoadingView();

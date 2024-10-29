@@ -5,6 +5,7 @@ import 'package:noteapp/core/constants/app_strings.dart';
 import 'package:noteapp/core/di/dependency_injection.dart' as di;
 import 'package:noteapp/features/domain/enum/action_type.dart';
 import 'package:noteapp/features/domain/model/action_param_model.dart';
+import 'package:noteapp/features/presentation/components/app_input.dart';
 import 'package:noteapp/features/presentation/components/app_scaffold.dart';
 import 'package:noteapp/features/presentation/screens/add_edit_note/bloc/add_edit_note_bloc.dart';
 import 'package:noteapp/features/presentation/screens/add_edit_note/bloc/add_edit_note_state.dart';
@@ -41,7 +42,34 @@ class _AddEditNoteForm extends StatelessWidget {
           _HeaderActions(),
         ],
       ),
-      body: const SizedBox(),
+      body: Container(
+        padding: EdgeInsets.only(
+          left: 20.w,
+          right: 20.w,
+          top: 10.h,
+          bottom: 20.h,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const _FormLabelView(text: AppStrings.title),
+            AppInput(),
+            SizedBox(height: 15.h),
+            const _FormLabelView(text: AppStrings.content),
+            Expanded(
+              child: SizedBox(
+                child: AppInput(
+                  maxLines: null,
+                  minLines: null,
+                  keyboardType: TextInputType.multiline,
+                  expands: true,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -95,9 +123,7 @@ class _HeaderActions extends StatelessWidget {
             if (action == ActionType.add)
               _IconView(
                 icon: Icons.save,
-                onTap: () {
-
-                },
+                onTap: () {},
               ),
             if (action == ActionType.view)
               _IconView(
@@ -110,9 +136,7 @@ class _HeaderActions extends StatelessWidget {
             if (action == ActionType.view)
               _IconView(
                 icon: Icons.delete,
-                onTap: () {
-
-                },
+                onTap: () {},
               ),
             if (action == ActionType.edit)
               _IconView(
@@ -124,7 +148,7 @@ class _HeaderActions extends StatelessWidget {
             SizedBox(width: 10.w),
           ],
         );
-      }
+      },
     );
   }
 }
@@ -152,6 +176,26 @@ class _IconView extends StatelessWidget {
             size: 30.h, // Customize the size
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _FormLabelView extends StatelessWidget {
+  final String text;
+
+  const _FormLabelView({
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: TextStyle(
+        fontWeight: FontWeight.w400,
+        fontSize: 16.sp,
+        color: Colors.black,
       ),
     );
   }
