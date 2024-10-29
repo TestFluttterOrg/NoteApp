@@ -2,6 +2,12 @@ class AppStrings {
   AppStrings._();
 
   static const appTitle = "Note App";
+  static const error = "Error";
+  static const confirm = "Confirm";
+  static const cancel = "Cancel";
+  static const message = "Message";
+  static const close = "Close";
+  static const okay = "Okay";
 
   static const messageFailedToGetNotes = "Failed to get Notes";
   static const messageNoDataFound = "No data found";
