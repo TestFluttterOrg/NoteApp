@@ -41,3 +41,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+lib/features/domain/entity/note_entity.freezed.dart
+lib/features/domain/entity/note_entity.g.dart
+lib/features/domain/entity/note_list_entity.freezed.dart
+lib/features/domain/entity/note_list_entity.g.dart
