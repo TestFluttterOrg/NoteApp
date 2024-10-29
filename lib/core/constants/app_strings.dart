@@ -1,6 +1,8 @@
 class AppStrings {
   AppStrings._();
 
+  static const appTitle = "Note App";
+
   static const messageFailedToGetNotes = "Failed to get Notes";
   static const messageNoDataFound = "No data found";
   static const messageFailedToAdd = "Failed to save the note.";
