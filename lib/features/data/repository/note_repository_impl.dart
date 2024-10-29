@@ -1,5 +1,6 @@
 import 'package:either_dart/src/either.dart';
 import 'package:noteapp/features/data/api/api_service.dart';
+import 'package:noteapp/features/data/datasource/shared_pref_datasource.dart';
 import 'package:noteapp/features/domain/entity/note_entity.dart';
 import 'package:noteapp/features/domain/mapper/note_entity_extension.dart';
 import 'package:noteapp/features/domain/model/failed_model.dart';
@@ -9,9 +10,11 @@ import 'package:noteapp/features/domain/repository/note_repository.dart';
 
 class NoteRepositoryImpl extends NoteRepository {
   final APIService apiService;
+  final SharedPrefDataSource sharedPrefDataSource;
 
   NoteRepositoryImpl({
     required this.apiService,
+    required this.sharedPrefDataSource,
   });
 
   @override
