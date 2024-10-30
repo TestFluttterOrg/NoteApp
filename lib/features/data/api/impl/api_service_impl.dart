@@ -3,7 +3,6 @@ import 'package:noteapp/core/constants/app_constants.dart';
 import 'package:noteapp/core/constants/app_strings.dart';
 import 'package:noteapp/features/data/api/api_service.dart';
 import 'package:noteapp/features/domain/entity/note_entity.dart';
-import 'package:noteapp/features/domain/entity/note_list_entity.dart';
 import 'package:noteapp/features/domain/model/result_model.dart';
 import 'package:http/http.dart' as http;
 

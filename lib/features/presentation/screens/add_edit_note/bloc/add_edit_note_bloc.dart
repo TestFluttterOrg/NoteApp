@@ -80,7 +80,9 @@ class AddEditNoteBloc extends Cubit<AddEditNoteState> {
           },
         );
       } else if (state.actionType == ActionType.edit) {
-        final result = await noteRepository.editNote(note: state.note ?? const NoteModel());
+        final note = state.note ?? const NoteModel();
+        final newNote = note.copyWith(title: title, content: content);
+        final result = await noteRepository.editNote(note: newNote);
         emit(state.copyWith(event: AddEditNoteUIEvents.hideDialog));
         result.fold(
           (left) {

@@ -218,6 +218,8 @@ class _HeaderActions extends StatelessWidget {
                 icon: Icons.save,
                 color: AppColors.blueColor,
                 onTap: () {
+                  //Hide the keyboard
+                  FocusScope.of(context).requestFocus(FocusNode());
                   bloc.save(
                     title: _titleController.text,
                     content: _contentController.text,

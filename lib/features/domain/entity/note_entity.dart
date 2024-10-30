@@ -17,3 +17,12 @@ class NoteEntity with _$NoteEntity {
 
 DateTime? _fromJson(String? date) => date != null ? DateTime.parse(date) : null;
 String? _toJson(DateTime? date) => date?.toIso8601String();
+
+extension NoteEntityExtensions on NoteEntity {
+  Map<String, dynamic> toJsonWithIdAndCreated() {
+    final json = toJson(); // Calls the default toJson from Freezed
+    json['id'] = id;
+    json['createdAt'] = createdAt?.toIso8601String();
+    return json;
+  }
+}

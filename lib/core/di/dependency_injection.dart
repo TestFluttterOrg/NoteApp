@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:noteapp/features/data/api/api_service.dart';
 import 'package:noteapp/features/data/api/impl/api_service_impl.dart';
+import 'package:noteapp/features/data/api/impl/api_service_mock_impl.dart';
 import 'package:noteapp/features/data/datasource/impl/shared_pref_datasource_impl.dart';
 import 'package:noteapp/features/data/datasource/shared_pref_datasource.dart';
 import 'package:noteapp/features/data/repository/note_repository_impl.dart';
@@ -15,7 +16,10 @@ Future<void> init() async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
   //API Service
-  vf.registerLazySingleton<APIService>(() => APIServiceImpl());
+  //Use this if you want to save the notes from cloud
+  //vf.registerLazySingleton<APIService>(() => APIServiceImpl());
+  //Use this if you want to save the notes locally
+  vf.registerLazySingleton<APIService>(() => APIServiceMockImpl(sharedPrefDataSource: vf.call()));
 
   //Datasource
   vf.registerLazySingleton<SharedPrefDataSource>(

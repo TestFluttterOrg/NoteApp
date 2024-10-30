@@ -3,6 +3,7 @@ import 'package:noteapp/features/data/api/api_service.dart';
 import 'package:noteapp/features/data/datasource/shared_pref_datasource.dart';
 import 'package:noteapp/features/domain/entity/note_entity.dart';
 import 'package:noteapp/features/domain/mapper/note_entity_extension.dart';
+import 'package:noteapp/features/domain/mapper/note_model_extension.dart';
 import 'package:noteapp/features/domain/model/failed_model.dart';
 import 'package:noteapp/features/domain/model/note_model.dart';
 import 'package:noteapp/features/domain/model/success_model.dart';
@@ -53,7 +54,7 @@ class NoteRepositoryImpl extends NoteRepository {
   Future<Either<FailedModel, SuccessModel<NoteModel>>> editNote({
     required NoteModel note,
   }) async {
-    final data = NoteEntity(id: note.id, title: note.title, content: note.content);
+    final data = note.mapToNoteEntity();
     final result = await apiService.updateNote(data);
     if (result.isSuccess) {
       final noteData = result.data?.mapToNoteModel() ?? const NoteModel();

@@ -51,6 +51,8 @@ class AppInput extends StatelessWidget {
         fontSize: fontSize,
       ),
       decoration: InputDecoration(
+        filled: readOnly,
+        fillColor: Colors.black12,
         contentPadding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
         isDense: true,
         hintText: hintText,

@@ -13,6 +13,19 @@ class NoteModel extends Equatable {
     this.createdAt,
   });
 
+  NoteModel copyWith({
+    String? id,
+    String? title,
+    String? content,
+    DateTime? createdAt,
+  }) =>
+      NoteModel(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        content: content ?? this.content,
+        createdAt: createdAt ?? this.createdAt,
+      );
+
   @override
   List<Object?> get props => [
         id,
