@@ -6,6 +6,7 @@ import 'package:noteapp/core/constants/app_strings.dart';
 import 'package:noteapp/core/di/dependency_injection.dart' as di;
 import 'package:noteapp/features/domain/enum/action_type.dart';
 import 'package:noteapp/features/domain/model/action_param_model.dart';
+import 'package:noteapp/features/domain/model/note_model.dart';
 import 'package:noteapp/features/presentation/components/app_dialog.dart';
 import 'package:noteapp/features/presentation/components/app_input.dart';
 import 'package:noteapp/features/presentation/components/app_scaffold.dart';
@@ -40,64 +41,70 @@ class _AddEditNoteForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<AddEditNoteBloc>();
-    return BlocListener<AddEditNoteBloc, AddEditNoteState>(
-      child: AppScaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: const _AppTitle(),
-          actions: const [
-            _HeaderActions(),
-          ],
-        ),
-        body: Container(
-          padding: EdgeInsets.only(
-            left: 20.w,
-            right: 20.w,
-            top: 10.h,
-            bottom: 20.h,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              //Title Label
-              const _FormLabelView(text: AppStrings.title),
-              //Title TextField
-              BlocBuilder<AddEditNoteBloc, AddEditNoteState>(
-                buildWhen: (prev, current) => prev.isTitleValid != current.isTitleValid,
-                builder: (context, state) {
-                  return AppInput(
-                    controller: _titleController,
-                    isValid: state.isTitleValid,
-                    errorMessage: state.isTitleValid ? "" : AppStrings.messageTitleCannotBeEmpty,
-                    onTextChanged: bloc.validateTitle,
-                  );
-                },
-              ),
-              SizedBox(height: 10.h),
-              //Content Label
-              const _FormLabelView(text: AppStrings.content),
-              //Content TextField
-              Expanded(
-                child: SizedBox(
-                  child: AppInput(
-                    controller: _contentController,
-                    maxLines: null,
-                    minLines: null,
-                    keyboardType: TextInputType.multiline,
-                    expands: true,
-                  ),
-                ),
-              ),
+    return BlocConsumer<AddEditNoteBloc, AddEditNoteState>(
+      buildWhen: (prev, current) => prev.note != current.note,
+      builder: (context, state) {
+        final note = state.note;
+        _titleController.text = note?.title ?? "";
+        _contentController.text = note?.content ?? "";
+        return AppScaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            title: const _AppTitle(),
+            actions: const [
+              _HeaderActions(),
             ],
           ),
-        ),
-      ),
+          body: Container(
+            padding: EdgeInsets.only(
+              left: 20.w,
+              right: 20.w,
+              top: 10.h,
+              bottom: 20.h,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //Title Label
+                const _FormLabelView(text: AppStrings.title),
+                //Title TextField
+                BlocBuilder<AddEditNoteBloc, AddEditNoteState>(
+                  buildWhen: (prev, current) => prev.isTitleValid != current.isTitleValid,
+                  builder: (context, state) {
+                    return AppInput(
+                      controller: _titleController,
+                      isValid: state.isTitleValid,
+                      errorMessage: state.isTitleValid ? "" : AppStrings.messageTitleCannotBeEmpty,
+                      onTextChanged: bloc.validateTitle,
+                    );
+                  },
+                ),
+                SizedBox(height: 10.h),
+                //Content Label
+                const _FormLabelView(text: AppStrings.content),
+                //Content TextField
+                Expanded(
+                  child: SizedBox(
+                    child: AppInput(
+                      controller: _contentController,
+                      maxLines: null,
+                      minLines: null,
+                      keyboardType: TextInputType.multiline,
+                      expands: true,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
       listenWhen: (prev, current) => prev.event != current.event,
       listener: (context, state) {
         final event = state.event;
         final message = state.message;
-        switch(event) {
+        switch (event) {
           case AddEditNoteUIEvents.showLoading:
             AppDialog.loading(context, message: message);
             break;
@@ -257,5 +264,14 @@ class _FormLabelView extends StatelessWidget {
         color: Colors.black,
       ),
     );
+  }
+}
+
+class _UIEvents extends StatelessWidget {
+  const _UIEvents();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }
