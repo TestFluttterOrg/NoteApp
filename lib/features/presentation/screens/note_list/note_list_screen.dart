@@ -124,7 +124,7 @@ class _ErrorView extends StatelessWidget {
                   state.message,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 16.sp,
+                    fontSize: 14.sp,
                     color: Colors.black,
                     fontWeight: FontWeight.w400,
                   ),
@@ -158,6 +158,18 @@ class _NoteListView extends StatelessWidget {
             builder: (context, state) {
               if (state is NoteListLoadedState) {
                 final list = state.noteList;
+                if (list.isEmpty) {
+                  return Center(
+                    child: Text(
+                      AppStrings.messageNoDataFound,
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  );
+                }
                 return Scrollbar(
                   child: ListView.separated(
                     separatorBuilder: (context, i) {

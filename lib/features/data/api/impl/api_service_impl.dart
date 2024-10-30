@@ -38,7 +38,7 @@ class APIServiceImpl extends APIService {
   @override
   Future<ResultModel> deleteNote(String noteId) async {
     try {
-      var url = Uri.parse("${AppConstants.apiBaseUrl}/api/notes");
+      var url = Uri.parse("${AppConstants.apiBaseUrl}/api/notes/$noteId");
       var response = await http.delete(url);
       if (response.statusCode == 200) {
         return const ResultModel(

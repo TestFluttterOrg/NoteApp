@@ -77,7 +77,10 @@ class NoteRepositoryImpl extends NoteRepository {
       //map the data from entity to model
       final noteList = data.map((e) => e.mapToNoteModel()).toList();
 
-      return Right(SuccessModel(data: noteList));
+      //Sort to the latest added
+      final sortedList = (noteList..sort((a, b) => a.createdAt!.compareTo(b.createdAt!))).reversed.toList();
+
+      return Right(SuccessModel(data: sortedList));
     } else {
       return Left(FailedModel(message: result.message));
     }

@@ -13,6 +13,7 @@ enum AddEditNoteUIEvents {
   hideDialog,
   showToast,
   addNoteSuccess,
+  deleteNoteSuccess,
 }
 
 class AddEditNoteBloc extends Cubit<AddEditNoteState> {
@@ -73,6 +74,7 @@ class AddEditNoteBloc extends Cubit<AddEditNoteState> {
               state.copyWith(
                 event: AddEditNoteUIEvents.addNoteSuccess,
                 message: right.message,
+                hasUpdate: true,
               ),
             );
           },
@@ -96,6 +98,7 @@ class AddEditNoteBloc extends Cubit<AddEditNoteState> {
                 actionType: ActionType.view,
                 event: AddEditNoteUIEvents.showToast,
                 message: right.message,
+                hasUpdate: true,
               ),
             );
           },
@@ -103,5 +106,39 @@ class AddEditNoteBloc extends Cubit<AddEditNoteState> {
       }
     }
     emit(state.copyWith(event: AddEditNoteUIEvents.initial));
+  }
+
+  void delete() async {
+    if (state.note != null) {
+      emit(
+        state.copyWith(
+          event: AddEditNoteUIEvents.showLoading,
+          message: AppStrings.messageDeleting,
+        ),
+      );
+
+      final result = await noteRepository.deleteNote(id: state.note!.id);
+      emit(state.copyWith(event: AddEditNoteUIEvents.hideDialog));
+      result.fold(
+        (left) {
+          emit(
+            state.copyWith(
+              event: AddEditNoteUIEvents.showErrorDialog,
+              message: left.message,
+            ),
+          );
+        },
+        (right) {
+          emit(
+            state.copyWith(
+              event: AddEditNoteUIEvents.deleteNoteSuccess,
+              message: right.message,
+            ),
+          );
+        },
+      );
+
+      emit(state.copyWith(event: AddEditNoteUIEvents.initial));
+    }
   }
 }

@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
 import 'package:noteapp/core/constants/app_strings.dart';
 import 'package:noteapp/core/di/dependency_injection.dart' as di;
 import 'package:noteapp/features/domain/enum/action_type.dart';
 import 'package:noteapp/features/domain/model/action_param_model.dart';
-import 'package:noteapp/features/domain/model/note_model.dart';
 import 'package:noteapp/features/presentation/components/app_dialog.dart';
 import 'package:noteapp/features/presentation/components/app_input.dart';
 import 'package:noteapp/features/presentation/components/app_scaffold.dart';
 import 'package:noteapp/features/presentation/screens/add_edit_note/bloc/add_edit_note_bloc.dart';
 import 'package:noteapp/features/presentation/screens/add_edit_note/bloc/add_edit_note_state.dart';
+import 'package:noteapp/features/presentation/screens/note_list/bloc/note_list_bloc.dart';
 
 TextEditingController _titleController = TextEditingController();
 TextEditingController _contentController = TextEditingController();
@@ -54,6 +55,16 @@ class _AddEditNoteForm extends StatelessWidget {
             actions: const [
               _HeaderActions(),
             ],
+            leading: _IconView(
+              icon: Icons.arrow_back_outlined,
+              onTap: () {
+                final state = context.read<AddEditNoteBloc>().state;
+                if (state.hasUpdate) {
+                  _reloadNoteList(context);
+                }
+                context.pop();
+              },
+            ),
           ),
           body: Container(
             padding: EdgeInsets.only(
@@ -98,7 +109,7 @@ class _AddEditNoteForm extends StatelessWidget {
                           expands: true,
                           readOnly: state.actionType == ActionType.view,
                         );
-                      }
+                      },
                     ),
                   ),
                 ),
@@ -117,6 +128,9 @@ class _AddEditNoteForm extends StatelessWidget {
             break;
           case AddEditNoteUIEvents.addNoteSuccess:
             _addNoteSuccess(context, message);
+            break;
+          case AddEditNoteUIEvents.deleteNoteSuccess:
+            _deleteNoteSuccess(context, message);
             break;
           case AddEditNoteUIEvents.showToast:
             Fluttertoast.showToast(msg: message);
@@ -138,6 +152,16 @@ class _AddEditNoteForm extends StatelessWidget {
     Fluttertoast.showToast(msg: message);
     _titleController.text = "";
     _contentController.text = "";
+  }
+
+  void _deleteNoteSuccess(BuildContext context, String message) {
+    Fluttertoast.showToast(msg: message);
+    _reloadNoteList(context);
+    context.pop();
+  }
+
+  void _reloadNoteList(BuildContext context) {
+    context.read<NoteListBloc>().getNoteList();
   }
 }
 
@@ -210,7 +234,15 @@ class _HeaderActions extends StatelessWidget {
               _IconView(
                 margin: EdgeInsets.only(right: 10.w),
                 icon: Icons.delete,
-                onTap: () {},
+                onTap: () {
+                  AppDialog.confirm(context, title: AppStrings.confirm, message: AppStrings.messageDeleteConfirm, confirmText: AppStrings.delete,
+                      onConfirm: () {
+                    AppDialog.dismiss(context);
+                    bloc.delete();
+                  }, onCancel: () {
+                    AppDialog.dismiss(context);
+                  });
+                },
               ),
             if (action == ActionType.edit)
               _IconView(
@@ -249,7 +281,7 @@ class _IconView extends StatelessWidget {
           onTap: onTap,
           child: Icon(
             icon,
-            size: 30.h, // Customize the size
+            size: 25.h, // Customize the size
           ),
         ),
       ),

@@ -15,6 +15,7 @@ class AppStrings {
   static const retry = "Retry";
   static const title = "Title";
   static const content = "Content";
+  static const delete = "Delete";
 
   static const messageFailedToGetNotes = "Failed to get Notes";
   static const messageNoDataFound = "No data found";
@@ -26,5 +27,6 @@ class AppStrings {
   static const messageNoteAdded = "The note has been successfully added.";
   static const messageTitleCannotBeEmpty = "Title cannot be empty";
   static const messageSaving = "Saving...";
-
+  static const messageDeleting = "Deleting...";
+  static const messageDeleteConfirm = "Are you sure you want to delete?";
 }

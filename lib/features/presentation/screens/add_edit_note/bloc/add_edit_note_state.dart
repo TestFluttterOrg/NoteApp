@@ -9,6 +9,7 @@ class AddEditNoteState extends Equatable {
   final bool isTitleValid;
   final String message;
   final AddEditNoteUIEvents event;
+  final bool hasUpdate;
 
   const AddEditNoteState({
     this.actionType = ActionType.view,
@@ -16,6 +17,7 @@ class AddEditNoteState extends Equatable {
     this.isTitleValid = true,
     this.message = "",
     this.event = AddEditNoteUIEvents.initial,
+    this.hasUpdate = false,
   });
 
   AddEditNoteState copyWith({
@@ -24,6 +26,7 @@ class AddEditNoteState extends Equatable {
     bool? isTitleValid,
     String? message,
     AddEditNoteUIEvents? event,
+    bool? hasUpdate,
   }) =>
       AddEditNoteState(
         actionType: actionType ?? this.actionType,
@@ -31,6 +34,7 @@ class AddEditNoteState extends Equatable {
         isTitleValid: isTitleValid ?? this.isTitleValid,
         message: message ?? this.message,
         event: event ?? this.event,
+        hasUpdate: hasUpdate ?? this.hasUpdate,
       );
 
   @override
@@ -40,5 +44,6 @@ class AddEditNoteState extends Equatable {
         isTitleValid,
         message,
         event,
+        hasUpdate,
       ];
 }

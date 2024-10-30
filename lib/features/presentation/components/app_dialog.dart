@@ -82,14 +82,14 @@ class AppDialog {
                               child: Material(
                                 color: Colors.white,
                                 child: InkWell(
-                                  onTap: onConfirm,
+                                  onTap: onCancel,
                                   child: Container(
                                     height: 40.h,
                                     alignment: Alignment.center,
                                     child: Text(
-                                      confirmText,
+                                      cancelText,
                                       style: TextStyle(
-                                        color: AppColors.textGreenColor,
+                                        color: Colors.black,
                                         fontSize: 15.sp,
                                       ),
                                     ),
@@ -106,12 +106,12 @@ class AppDialog {
                               child: Material(
                                 color: Colors.white,
                                 child: InkWell(
-                                  onTap: onCancel,
+                                  onTap: onConfirm,
                                   child: Container(
                                     alignment: Alignment.center,
                                     height: 40.h,
                                     child: Text(
-                                      cancelText,
+                                      confirmText,
                                       style: TextStyle(
                                         color: AppColors.textRedColor,
                                         fontSize: 15.sp,
