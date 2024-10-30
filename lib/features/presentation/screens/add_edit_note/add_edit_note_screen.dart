@@ -70,13 +70,14 @@ class _AddEditNoteForm extends StatelessWidget {
                 const _FormLabelView(text: AppStrings.title),
                 //Title TextField
                 BlocBuilder<AddEditNoteBloc, AddEditNoteState>(
-                  buildWhen: (prev, current) => prev.isTitleValid != current.isTitleValid,
+                  buildWhen: (prev, current) => prev.isTitleValid != current.isTitleValid || prev.actionType != current.actionType,
                   builder: (context, state) {
                     return AppInput(
                       controller: _titleController,
                       isValid: state.isTitleValid,
                       errorMessage: state.isTitleValid ? "" : AppStrings.messageTitleCannotBeEmpty,
                       onTextChanged: bloc.validateTitle,
+                      readOnly: state.actionType == ActionType.view,
                     );
                   },
                 ),
@@ -86,12 +87,18 @@ class _AddEditNoteForm extends StatelessWidget {
                 //Content TextField
                 Expanded(
                   child: SizedBox(
-                    child: AppInput(
-                      controller: _contentController,
-                      maxLines: null,
-                      minLines: null,
-                      keyboardType: TextInputType.multiline,
-                      expands: true,
+                    child: BlocBuilder<AddEditNoteBloc, AddEditNoteState>(
+                      buildWhen: (prev, current) => prev.actionType != current.actionType,
+                      builder: (context, state) {
+                        return AppInput(
+                          controller: _contentController,
+                          maxLines: null,
+                          minLines: null,
+                          keyboardType: TextInputType.multiline,
+                          expands: true,
+                          readOnly: state.actionType == ActionType.view,
+                        );
+                      }
                     ),
                   ),
                 ),
@@ -110,6 +117,9 @@ class _AddEditNoteForm extends StatelessWidget {
             break;
           case AddEditNoteUIEvents.addNoteSuccess:
             _addNoteSuccess(context, message);
+            break;
+          case AddEditNoteUIEvents.showToast:
+            Fluttertoast.showToast(msg: message);
             break;
           case AddEditNoteUIEvents.showErrorDialog:
             AppDialog.error(context, message: message);
@@ -264,14 +274,5 @@ class _FormLabelView extends StatelessWidget {
         color: Colors.black,
       ),
     );
-  }
-}
-
-class _UIEvents extends StatelessWidget {
-  const _UIEvents();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
   }
 }

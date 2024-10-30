@@ -12,6 +12,7 @@ class AppInput extends StatelessWidget {
   final int? maxLines;
   final int? minLines;
   final bool expands;
+  final bool readOnly;
 
   const AppInput({
     super.key,
@@ -24,6 +25,7 @@ class AppInput extends StatelessWidget {
     this.maxLines = 1,
     this.minLines = 1,
     this.expands = false,
+    this.readOnly = false,
   });
 
   @override
@@ -34,6 +36,7 @@ class AppInput extends StatelessWidget {
 
     final fieldView = TextField(
       controller: controller,
+      readOnly: readOnly,
       expands: expands,
       minLines: minLines,
       maxLines: maxLines,
@@ -65,7 +68,11 @@ class AppInput extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: !isValid ? AppColors.fieldRedBorderColor : AppColors.fieldBlueBorderColor,
+            color: !isValid
+                ? AppColors.fieldRedBorderColor
+                : readOnly
+                    ? AppColors.fieldGrayBorderColor
+                    : AppColors.fieldBlueBorderColor,
             width: borderWidth,
           ),
           borderRadius: BorderRadius.circular(borderRadius),

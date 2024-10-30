@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:noteapp/core/constants/app_strings.dart';
 import 'package:noteapp/features/domain/enum/action_type.dart';
 import 'package:noteapp/features/domain/model/action_param_model.dart';
+import 'package:noteapp/features/domain/model/note_model.dart';
 import 'package:noteapp/features/domain/repository/note_repository.dart';
 import 'package:noteapp/features/presentation/screens/add_edit_note/bloc/add_edit_note_state.dart';
 
@@ -77,7 +78,7 @@ class AddEditNoteBloc extends Cubit<AddEditNoteState> {
           },
         );
       } else if (state.actionType == ActionType.edit) {
-        final result = await noteRepository.addNote(title: title, content: content);
+        final result = await noteRepository.editNote(note: state.note ?? const NoteModel());
         emit(state.copyWith(event: AddEditNoteUIEvents.hideDialog));
         result.fold(
           (left) {
@@ -90,6 +91,13 @@ class AddEditNoteBloc extends Cubit<AddEditNoteState> {
           },
           (right) {
             emit(state.copyWith(event: AddEditNoteUIEvents.hideDialog));
+            emit(
+              state.copyWith(
+                actionType: ActionType.view,
+                event: AddEditNoteUIEvents.showToast,
+                message: right.message,
+              ),
+            );
           },
         );
       }
