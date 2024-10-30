@@ -113,7 +113,7 @@ class AppDialog {
                                     child: Text(
                                       confirmText,
                                       style: TextStyle(
-                                        color: AppColors.textRedColor,
+                                        color: AppColors.redColor,
                                         fontSize: 15.sp,
                                       ),
                                     ),
@@ -180,7 +180,7 @@ class AppDialog {
                                   AppStrings.error,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: AppColors.textRedColor,
+                                    color: AppColors.redColor,
                                     fontSize: 15.sp,
                                   ),
                                 ),
@@ -306,6 +306,7 @@ class AppDialog {
                         height: 20.h,
                         child: CircularProgressIndicator(
                           strokeWidth: 2.w,
+                          color: AppColors.blueColor,
                         ),
                       ),
                       SizedBox(width: 10.w),

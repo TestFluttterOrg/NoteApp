@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:noteapp/core/constants/app_colors.dart';
 import 'package:noteapp/core/constants/app_strings.dart';
 import 'package:noteapp/core/di/dependency_injection.dart' as di;
 import 'package:noteapp/features/domain/enum/action_type.dart';
@@ -215,6 +216,7 @@ class _HeaderActions extends StatelessWidget {
               _IconView(
                 margin: EdgeInsets.only(right: 10.w),
                 icon: Icons.save,
+                color: AppColors.blueColor,
                 onTap: () {
                   bloc.save(
                     title: _titleController.text,
@@ -226,6 +228,7 @@ class _HeaderActions extends StatelessWidget {
               _IconView(
                 margin: EdgeInsets.only(right: 10.w),
                 icon: Icons.edit,
+                color: AppColors.blueColor,
                 onTap: () {
                   bloc.setAction(ActionType.edit);
                 },
@@ -234,14 +237,21 @@ class _HeaderActions extends StatelessWidget {
               _IconView(
                 margin: EdgeInsets.only(right: 10.w),
                 icon: Icons.delete,
+                color: AppColors.redColor,
                 onTap: () {
-                  AppDialog.confirm(context, title: AppStrings.confirm, message: AppStrings.messageDeleteConfirm, confirmText: AppStrings.delete,
-                      onConfirm: () {
-                    AppDialog.dismiss(context);
-                    bloc.delete();
-                  }, onCancel: () {
-                    AppDialog.dismiss(context);
-                  });
+                  AppDialog.confirm(
+                    context,
+                    title: AppStrings.confirm,
+                    message: AppStrings.messageDeleteConfirm,
+                    confirmText: AppStrings.delete,
+                    onConfirm: () {
+                      AppDialog.dismiss(context);
+                      bloc.delete();
+                    },
+                    onCancel: () {
+                      AppDialog.dismiss(context);
+                    },
+                  );
                 },
               ),
             if (action == ActionType.edit)
@@ -263,11 +273,13 @@ class _IconView extends StatelessWidget {
   final IconData icon;
   final Function() onTap;
   final EdgeInsets? margin;
+  final Color? color;
 
   const _IconView({
     required this.icon,
     required this.onTap,
     this.margin,
+    this.color,
   });
 
   @override
@@ -281,6 +293,7 @@ class _IconView extends StatelessWidget {
           onTap: onTap,
           child: Icon(
             icon,
+            color: color,
             size: 25.h, // Customize the size
           ),
         ),

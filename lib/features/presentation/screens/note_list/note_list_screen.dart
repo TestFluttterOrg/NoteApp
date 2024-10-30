@@ -63,6 +63,7 @@ class _HeaderAction extends StatelessWidget {
           },
           child: Icon(
             Icons.add,
+            color: AppColors.greenColor,
             size: 30.h, // Customize the size
           ),
         ),
@@ -98,6 +99,7 @@ class _LoadingView extends StatelessWidget {
         height: 30.h,
         width: 30.h,
         child: CircularProgressIndicator(
+          color: AppColors.blueColor,
           strokeWidth: 3.w,
         ),
       ),
