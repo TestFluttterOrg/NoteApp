@@ -11,7 +11,7 @@ class APIServiceImpl extends APIService {
   @override
   Future<ResultModel<NoteEntity>> addNote(NoteEntity note) async {
     try {
-      var url = Uri.https(AppConstants.apiBaseUrl, 'api/notes');
+      var url = Uri.parse("${AppConstants.apiBaseUrl}/api/notes");
       var response = await http.post(url, body: note.toJson());
       if (response.statusCode == 201) {
         final rawData = response.body;
@@ -38,7 +38,7 @@ class APIServiceImpl extends APIService {
   @override
   Future<ResultModel> deleteNote(String noteId) async {
     try {
-      var url = Uri.https(AppConstants.apiBaseUrl, 'api/notes/$noteId');
+      var url = Uri.parse("${AppConstants.apiBaseUrl}/api/notes");
       var response = await http.delete(url);
       if (response.statusCode == 200) {
         return const ResultModel(
@@ -82,7 +82,7 @@ class APIServiceImpl extends APIService {
   @override
   Future<ResultModel<NoteEntity>> updateNote(NoteEntity note) async {
     try {
-      var url = Uri.https(AppConstants.apiBaseUrl, 'api/notes/${note.id ?? ""}');
+      var url = Uri.parse("${AppConstants.apiBaseUrl}/api/notes/${note.id ?? ""}");
       var response = await http.put(url, body: note.toJson());
       if (response.statusCode == 200) {
         final rawData = response.body;

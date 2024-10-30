@@ -25,5 +25,6 @@ class AppStrings {
   static const messageNoteEdited = "The note has been successfully updated.";
   static const messageNoteAdded = "The note has been successfully added.";
   static const messageTitleCannotBeEmpty = "Title cannot be empty";
+  static const messageSaving = "Saving...";
 
 }

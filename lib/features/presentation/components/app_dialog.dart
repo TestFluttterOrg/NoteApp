@@ -180,7 +180,7 @@ class AppDialog {
                                   AppStrings.error,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.black,
+                                    color: AppColors.textRedColor,
                                     fontSize: 15.sp,
                                   ),
                                 ),
@@ -212,9 +212,9 @@ class AppDialog {
                               alignment: Alignment.center,
                               height: 40.h,
                               child: Text(
-                                AppStrings.close,
+                                AppStrings.okay.toUpperCase(),
                                 style: TextStyle(
-                                  color: AppColors.textRedColor,
+                                  color: Colors.black,
                                   fontSize: 15.sp,
                                 ),
                               ),
@@ -263,6 +263,62 @@ class AppDialog {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(13.r),
                 child: child,
+              ),
+            ),
+          ),
+        );
+      },
+    ).whenComplete(() {
+      isOpen = false;
+      if (whenComplete != null) {
+        whenComplete();
+      }
+    });
+  }
+
+  static Future<void> loading(
+      BuildContext context, {
+        required String message,
+        Function? whenComplete,
+      }) {
+    dismiss(context);
+    isOpen = true;
+
+    return showDialog<dynamic>(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return Container(
+          color: Colors.black12,
+          child: Center(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(13.r),
+              child: Material(
+                child: Container(
+                  color: Colors.white,
+                  width: 255.w,
+                  height: 60.h,
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 20.h,
+                        height: 20.h,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.w,
+                        ),
+                      ),
+                      SizedBox(width: 10.w),
+                      Text(
+                        message,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12.3.sp,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
